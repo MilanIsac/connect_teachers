@@ -19,7 +19,7 @@
         <div class="card-body">
             <h5 class="card-title">{{ teacher.username }}</h5>
             <p class="card-text">{{ teacher.description }}</p>
-            <a href="/show_profile" class="btn btn-outline-light">Connect</a>
+            <a href="/profile/{{ teacher.username }}" class="btn btn-outline-light">Connect</a>
         </div>
     </div>
     {% endfor %}
