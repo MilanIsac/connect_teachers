@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    <h3 class="heading">Login</h3>
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <form action="/login" method="post">
+        <div class="login-username"><input type="text" name="username" id="username" placeholder="Username"></div>
+        <div class="login-password"><input type="password" name="password" id="password" placeholder="Password"></div>
+        <button class="login-btn btn btn-primary">Login</button>
+    </form>
+    <p>Don't have an account? <a href="/signup">Register Here</a></p>
+</div>
+{% endblock %}

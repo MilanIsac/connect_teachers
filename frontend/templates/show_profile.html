@@ -1,0 +1,35 @@
+{% extends 'layout.html' %}
+
+
+{% block content %}
+<div>
+    <div class="show-card">
+        <div class="card-header bg -primary mb-3">
+            <h2>Teacher's Profile</h2>
+        </div>
+
+        <hr>
+        <br>
+        
+        <div class="card-body text-center">
+            
+            {% if user.image %}
+            <img src="{{ user.image }}" alt="Profile picture" class="mb-3" style="max-height: 200px;">
+            {% else %}
+            <img src="{{ url_for('static', filename='images/default.jpg') }}" alt="No Image" class="mb-3"
+                style="max-height: 200px;">
+            {% endif %}
+            
+            <h3>{{ user.username }}</h3>
+            <p><strong>Email:</strong> {{ user.email }}</p>
+            <p><strong>Phone:</strong> {{ user.phone }}</p>
+            <p><strong>Description:</strong> {{ user.description }}</p>
+
+            {% if session['username'] == user.username %}
+            <a href="/edit_profile" class="btn btn-success text-white">Edit Profile</a>
+            {% endif %}
+
+        </div>
+    </div>
+</div>
+{% endblock %}

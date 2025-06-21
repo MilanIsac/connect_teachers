@@ -1,0 +1,37 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+<h3 class="heading text-center mb-4">Edit Your Profile</h3>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <form action="/edit_profile" method="POST" enctype="multipart/form-data" class="signup-container">
+
+        <div>
+            <input type="tel" name="phone" id="phone" placeholder="Mobile Number" pattern="[0-9]{10}"
+                value="{{ profile.phone }}" required>
+        </div>
+
+        <div>
+            {% if profile.image %}
+            <div class="text-center mt-1 edit-img">
+                <img src="{{ profile.image }}" alt="Current Profile Picture"
+                    style="max-height: 100px; border-radius: 10px;">
+            </div>
+            {% endif %}
+
+            <input type="file" name="image" id="image" accept="image/*">
+        </div>
+
+        <div>
+            <textarea name="description" id="description" rows="4" placeholder="Enter about yourself"
+                required>{{ profile.description }}</textarea>
+        </div>
+
+        <div>
+            <button type="submit" class="btn btn-primary signup-submit">Update</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

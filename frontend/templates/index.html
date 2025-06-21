@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="heading text-center">
+    <h1 class="display-4 fw-bold">
+        <span id="typing-title"></span><span class="cursor">|</span>
+    </h1>
+    <p class="lead mt-3">This is a platform for students to connect with teachers.</p>
+</div>
+
+<hr>
+<br>
+
+<div class="all_cards">
+    {% for teacher in teachers %}
+    <div class="card h-100 shadow text-white" style="background-color: #1e1e1e; width: 18rem;">
+        <img src="{{ teacher.image or url_for('static', filename='images/logo.jpg') }}" class="card-img-top"
+            alt="Profile image" style="height: 180px; object-fit: cover;">
+        <div class="card-body">
+            <h5 class="card-title">{{ teacher.username }}</h5>
+            <p class="card-text">{{ teacher.description }}</p>
+            <a href="/show_profile" class="btn btn-outline-light">Connect</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}
