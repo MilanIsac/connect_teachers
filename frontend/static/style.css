@@ -1,15 +1,15 @@
 body{
-    background-color: #222831 !important;
+    background-color: #000000 !important;
     /* color: rgb(255, 255, 255) !important; */
-    color: #B9B4C7 !important;
+    color: #88b1be !important;
 }
 
 .navbar{
     /* background-color: rgba(179, 184, 254, 0.612) !important; */
-    background-color: #B9B4C7 !important;
+    background-color: #88b1be !important;
     font-size: 22px;
     margin: -5px;
-    /* color: #DFD0B8 !important; */
+    /* color: #ffffff !important; */
 }
 
 .all_cards{
@@ -18,9 +18,10 @@ body{
     flex-wrap: wrap !important;
     gap: 20px;
     /* padding: 20px 40px; */
-    justify-content: flex-start !important;
+    justify-content: center !important;
     width: 100% !important;
     box-sizing: border-box !important;
+    /* align-items: center !important; */
 }
 
 .heading{

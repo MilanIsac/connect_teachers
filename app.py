@@ -6,7 +6,7 @@ import hashlib
 import cloudinary
 import cloudinary.uploader
 # import cloudinary.api
-from dotenv import load_dot_env
+from dotenv import load_dotenv
 import os
 
 app = Flask(__name__, template_folder='frontend/templates', static_folder='frontend/static')
