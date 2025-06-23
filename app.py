@@ -65,7 +65,7 @@ def login():
 
             return redirect(url_for('index'))
         else:
-            flash('Incorrect username or password!', 'error')
+            flash('Incorrect username or password!', 'danger')
 
     return render_template('login.html')
 
@@ -138,7 +138,7 @@ def create_profile():
         profile = cursor.fetchone()
 
         if profile:
-            flash('Profile already exists!', 'error')
+            flash('Profile already exists!', 'danger')
             return redirect(url_for('show_profile'))
 
         cursor.execute("""
@@ -168,7 +168,7 @@ def show_profile():
     """, (session['username'],))
     user = cursor.fetchone()
 
-    return render_template('show_profile.html', user=user)
+    return render_template('index.html', user=user)
 
 
 @app.route('/edit_profile', methods=['GET', 'POST'])
@@ -211,7 +211,7 @@ def edit_profile():
 
         mysql.connection.commit()
         flash("Profile updated successfully", "success")
-        return redirect(url_for('show_profile'))
+        return redirect(url_for('index'))
 
     cursor.execute("""
         SELECT phone, description, image 
