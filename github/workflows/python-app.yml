@@ -10,19 +10,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    services:
-      mysql:
-        image: mysql:5.7
-        env:
-          MYSQL_ROOT_PASSWORD: rootpass
-          MYSQL_DATABASE: teachers_connect
-        ports:
-          - 3306:3306
-        options: >-
-          --health-cmd="mysqladmin ping --silent"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=3
+    env:
+      USE_SQLITE: true  # ✅ correctly placed here
 
     steps:
       - name: Checkout code
@@ -37,15 +26,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          pip install pytest flask-mysqldb
-
-      - name: Wait for MySQL to be ready
-        run: |
-          for i in {1..10}; do
-            mysqladmin ping -h127.0.0.1 -uroot -prootpass && break
-            sleep 5
-          done
+          pip install pytest
 
       - name: Run tests
-        run: |
-          pytest
+        run: pytest

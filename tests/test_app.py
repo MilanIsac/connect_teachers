@@ -8,6 +8,20 @@ import io
 import cloudinary.uploader
 
 
+USE_SQLITE = os.getenv('USE_SQLITE', 'false').lower() == 'true'
+
+if USE_SQLITE:
+    import sqlite3
+    # Setup for SQLite (optional replacement code here)
+else:
+    from flask_mysqldb import MySQL
+    app.config['MYSQL_HOST'] = 'localhost'
+    app.config['MYSQL_USER'] = 'root'
+    app.config['MYSQL_PASSWORD'] = 'yourpassword'
+    app.config['MYSQL_DB'] = 'teachers_connect'
+    mysql = MySQL(app)
+
+
 # Mock Cloudinary upload during tests
 def dummy_upload(file):
     return {'secure_url': 'http://dummy.url/test.jpg'}
