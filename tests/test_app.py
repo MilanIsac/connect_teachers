@@ -6,7 +6,8 @@ import cloudinary.uploader
 # Set environment before app loads config
 os.environ["USE_SQLITE"] = "true"
 
-from app import app, db  # Must come after USE_SQLITE
+from app import app as flask_app
+from app import db
 from flask import Flask
 
 # ----- Cloudinary mock -----
@@ -17,15 +18,15 @@ cloudinary.uploader.upload = dummy_upload
 # ----- Test Client Fixture -----
 @pytest.fixture
 def client():
-    app.config['TESTING'] = True
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    flask_app.config['TESTING'] = True
+    flask_app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
+    flask_app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-    with app.test_client() as client:
-        with app.app_context():
+    with flask_app.test_client() as client:
+        with flask_app.app_context():
             db.create_all()
         yield client
-        with app.app_context():
+        with flask_app.app_context():
             db.drop_all()
 
 # ----- Tests -----
