@@ -12,14 +12,15 @@ USE_SQLITE = os.getenv('USE_SQLITE', 'false').lower() == 'true'
 
 if USE_SQLITE:
     import sqlite3
-    # Setup for SQLite (optional replacement code here)
+    # You can add SQLite test config here if needed
 else:
     from flask_mysqldb import MySQL
-    app.config['MYSQL_HOST'] = 'localhost'
-    app.config['MYSQL_USER'] = 'root'
-    app.config['MYSQL_PASSWORD'] = 'yourpassword'
-    app.config['MYSQL_DB'] = 'teachers_connect'
-    mysql = MySQL(app)
+    flask_app.config['MYSQL_HOST'] = 'localhost'
+    flask_app.config['MYSQL_USER'] = 'root'
+    flask_app.config['MYSQL_PASSWORD'] = 'yourpassword'
+    flask_app.config['MYSQL_DB'] = 'teachers_connect'
+    mysql = MySQL(flask_app)
+
 
 
 # Mock Cloudinary upload during tests
