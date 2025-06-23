@@ -9,8 +9,29 @@ import cloudinary.uploader
 from dotenv import load_dotenv
 import os
 
+from flask_sqlalchemy import SQLAlchemy
+
+db = SQLAlchemy()
+
 app = Flask(__name__, template_folder='frontend/templates', static_folder='frontend/static')
+
 app.secret_key = os.getenv('APP_SECRET_KEY')
+
+
+# Determine which DB to use
+USE_SQLITE = os.environ.get('USE_SQLITE', 'false').lower() == 'true'
+
+if USE_SQLITE:
+    # ✅ Use SQLite for tests
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
+else:
+    # ✅ Use MySQL for dev/prod
+    app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql://{os.getenv('MYSQL_USER')}:{os.getenv('MYSQL_PASSWORD')}@{os.getenv('MYSQL_HOST')}/{os.getenv('MYSQL_DB')}"
+
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+# Initialize DB
+db.init_app(app)
 
 # MySQL Configuration
 app.config['MYSQL_HOST'] = os.getenv('MYSQL_HOST')

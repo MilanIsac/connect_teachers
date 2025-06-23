@@ -2,17 +2,13 @@ import os
 import io
 import pytest
 import cloudinary.uploader
+from dotenv import load_dotenv
 
 
 import sys
-import os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-# Set environment before app loads config
-os.environ["USE_SQLITE"] = "true"
-
 from app import app as flask_app
-from app import db
 from flask import Flask
 
 # ----- Cloudinary mock -----
@@ -24,15 +20,11 @@ cloudinary.uploader.upload = dummy_upload
 @pytest.fixture
 def client():
     flask_app.config['TESTING'] = True
-    flask_app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
-    flask_app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    flask_app.config['WTF_CSRF_ENABLED'] = False
 
     with flask_app.test_client() as client:
         with flask_app.app_context():
-            db.create_all()
-        yield client
-        with flask_app.app_context():
-            db.drop_all()
+            yield client
 
 # ----- Tests -----
 
