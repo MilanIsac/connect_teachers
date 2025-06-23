@@ -3,6 +3,11 @@ import io
 import pytest
 import cloudinary.uploader
 
+
+import sys
+import os
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 # Set environment before app loads config
 os.environ["USE_SQLITE"] = "true"
 
