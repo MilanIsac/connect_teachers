@@ -13,6 +13,7 @@ USE_SQLITE = os.getenv('USE_SQLITE', 'false').lower() == 'true'
 if USE_SQLITE:
     import sqlite3
     # You can add SQLite test config here if needed
+    flask_app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
 else:
     from flask_mysqldb import MySQL
     flask_app.config['MYSQL_HOST'] = '127.0.0.1'
