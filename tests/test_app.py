@@ -1,72 +1,65 @@
-import sys
 import os
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
-import pytest
-from app import app as flask_app
 import io
+import pytest
 import cloudinary.uploader
 
+# Set environment before app loads config
+os.environ["USE_SQLITE"] = "true"
 
-USE_SQLITE = os.getenv('USE_SQLITE', 'false').lower() == 'true'
+from app import app, db  # Must come after USE_SQLITE
+from flask import Flask
 
-if USE_SQLITE:
-    import sqlite3
-    # You can add SQLite test config here if needed
-    flask_app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
-else:
-    from flask_mysqldb import MySQL
-    flask_app.config['MYSQL_HOST'] = '127.0.0.1'
-    flask_app.config['MYSQL_USER'] = os.getenv('MYSQL_USER')
-    flask_app.config['MYSQL_PASSWORD'] = os.getenv('MYSQL_PASSWORD')
-    flask_app.config['MYSQL_DB'] = 'teachers_connect'
-    mysql = MySQL(flask_app)
-
-
-
-# Mock Cloudinary upload during tests
+# ----- Cloudinary mock -----
 def dummy_upload(file):
     return {'secure_url': 'http://dummy.url/test.jpg'}
-
 cloudinary.uploader.upload = dummy_upload
 
+# ----- Test Client Fixture -----
 @pytest.fixture
 def client():
-    flask_app.config['TESTING'] = True
-    flask_app.config['WTF_CSRF_ENABLED'] = False
-    with flask_app.test_client() as client:
-        with flask_app.app_context():
-            yield client
+    app.config['TESTING'] = True
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+    with app.test_client() as client:
+        with app.app_context():
+            db.create_all()
+        yield client
+        with app.app_context():
+            db.drop_all()
+
+# ----- Tests -----
 
 def test_signup_and_login(client):
-    username = 'testuser1'
-    password = 'testpass'
-
-    # Signup
     client.post('/signup', data={
-        'username': username,
-        'email': 'test1@example.com',
-        'password': password,
-        'confirm_password': password
+        'username': 'testuser',
+        'email': 'test@example.com',
+        'password': 'testpass',
+        'confirm_password': 'testpass'
     }, follow_redirects=True)
 
-    # Login
     response = client.post('/login', data={
-        'username': username,
-        'password': password
-    }, follow_redirects=True)
-    assert b'Logout' in response.data
-
-def test_profile_creation(client):
-    # Login
-    client.post('/login', data={
-        'username': 'testuser1',
+        'username': 'testuser',
         'password': 'testpass'
     }, follow_redirects=True)
 
-    dummy_image = (io.BytesIO(b'my file contents'), 'dummy.jpg')
+    assert b'Logout' in response.data
 
-    # Create Profile
+def test_profile_creation(client):
+    client.post('/signup', data={
+        'username': 'creator',
+        'email': 'creator@example.com',
+        'password': 'pass123',
+        'confirm_password': 'pass123'
+    }, follow_redirects=True)
+
+    client.post('/login', data={
+        'username': 'creator',
+        'password': 'pass123'
+    }, follow_redirects=True)
+
+    dummy_image = (io.BytesIO(b'mock image data'), 'dummy.jpg')
+
     response = client.post('/create_profile', data={
         'phone': '9876543210',
         'description': 'Test teacher bio.',
@@ -76,14 +69,28 @@ def test_profile_creation(client):
     assert b'Profile created successfully' in response.data
 
 def test_profile_editing(client):
-    client.post('/login', data={
-        'username': 'testuser1',
-        'password': 'testpass'
+    client.post('/signup', data={
+        'username': 'edituser',
+        'email': 'edit@example.com',
+        'password': 'editpass',
+        'confirm_password': 'editpass'
     }, follow_redirects=True)
+
+    client.post('/login', data={
+        'username': 'edituser',
+        'password': 'editpass'
+    }, follow_redirects=True)
+
+    dummy_image = (io.BytesIO(b'mock image'), 'dummy.jpg')
+    client.post('/create_profile', data={
+        'phone': '1234567890',
+        'description': 'Initial',
+        'image': dummy_image
+    }, content_type='multipart/form-data', follow_redirects=True)
 
     response = client.post('/edit_profile', data={
         'phone': '9999999999',
-        'description': 'Updated profile info'
+        'description': 'Updated bio'
     }, follow_redirects=True)
 
     assert b'Profile updated successfully' in response.data
@@ -92,20 +99,20 @@ def test_create_profile_requires_login(client):
     response = client.get('/create_profile', follow_redirects=True)
     assert b'Login' in response.data or b'Sign Up' in response.data
 
-def test_error_invalid_signup_email(client):
+def test_invalid_email_signup(client):
     response = client.post('/signup', data={
-        'username': 'bademailuser',
-        'email': 'not-an-email',
-        'password': 'pass1234',
-        'confirm_password': 'pass1234'
+        'username': 'bademail',
+        'email': 'invalidemail',
+        'password': 'pass123',
+        'confirm_password': 'pass123'
     }, follow_redirects=True)
     assert b'Invalid email address' in response.data
 
-def test_error_password_mismatch(client):
+def test_password_mismatch(client):
     response = client.post('/signup', data={
-        'username': 'nomatchuser',
-        'email': 'nomatch@example.com',
+        'username': 'mismatch',
+        'email': 'mismatch@example.com',
         'password': 'abc123',
-        'confirm_password': 'abc999'
+        'confirm_password': 'abc456'
     }, follow_redirects=True)
     assert b'Passwords do not match' in response.data
