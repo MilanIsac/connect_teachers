@@ -15,9 +15,9 @@ if USE_SQLITE:
     # You can add SQLite test config here if needed
 else:
     from flask_mysqldb import MySQL
-    flask_app.config['MYSQL_HOST'] = 'localhost'
+    flask_app.config['MYSQL_HOST'] = '127.0.0.1'
     flask_app.config['MYSQL_USER'] = 'root'
-    flask_app.config['MYSQL_PASSWORD'] = 'yourpassword'
+    flask_app.config['MYSQL_PASSWORD'] = os.getenv('MYSQL_PASSWORD')
     flask_app.config['MYSQL_DB'] = 'teachers_connect'
     mysql = MySQL(flask_app)
 
