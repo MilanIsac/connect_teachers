@@ -57,18 +57,20 @@
 </nav>
 
 <!-- Flash Messages -->
-<div class="container mt-3">
-    {% with messages = get_flashed_messages(with_categories=true) %}
+<div class="container-fluid mt-3 px-4">
+  {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
-    {% for category, message in messages %}
-    <div class="alert alert-{{ category }} alert-dismissible fade show w-100" role="alert">
-        {{ message }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-    {% endfor %}
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }} alert-dismissible fade show w-100" role="alert">
+          {{ message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      {% endfor %}
     {% endif %}
-    {% endwith %}
+  {% endwith %}
 </div>
+
+
 
 <!-- Page Content -->
 <div class="container mt-4">

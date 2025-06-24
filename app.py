@@ -168,9 +168,9 @@ def create_profile():
         """, (user_id, phone, image_url, description))
         mysql.connection.commit()
 
-        session['has_profile'] = True  # ✅ Set profile flag
+        session['has_profile'] = True
         flash('Profile created successfully!', 'success')
-        return redirect(url_for('show_profile'))
+        return redirect(url_for('index'))
 
     return render_template('create_profile.html')
 

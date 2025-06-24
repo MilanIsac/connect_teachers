@@ -178,3 +178,14 @@ hr {
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
 } */
+
+
+.alert {
+  width: 40%;
+  max-width: 350px;
+  margin: 15px auto;
+  border-radius: 8px;
+  padding: 15px 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
