@@ -34,8 +34,8 @@ def client():
 def test_signup_and_login(mock_mysql, client):
     cursor = MagicMock()
     mock_mysql.connection.cursor.return_value = cursor
-    cursor.fetchone.side_effect = [None,  # user not exists on signup check
-                                   {'id': 1, 'username': 'testuser', 'password': 'hashed'}]  # after insert
+    cursor.fetchone.side_effect = lambda: {'id': 1, 'username': 'testuser', 'password': 'hashed'}
+
 
     client.post('/signup', data={
         'username': 'testuser',
