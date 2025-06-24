@@ -1,15 +1,15 @@
 body{
     background-color: #000000 !important;
     /* color: rgb(255, 255, 255) !important; */
-    color: #eceaff7e !important;
+    color: #ffffff !important;
 }
 
 .navbar{
-    /* background-color: rgba(179, 184, 254, 0.612) !important; */
-    background-color: #eceaff7e !important;
+    background-color: rgb(136, 0, 255) !important;
+    /* background-color: #bb00ffc8 !important; */
     font-size: 22px;
     margin: -5px;
-    /* color: #ffffff !important; */
+    color: #ffffff !important;
 }
 
 .all_cards{
@@ -56,15 +56,6 @@ body{
     font-size: 16px;
 }
 
-.signup-submit{
-    margin-top: 10px;
-    margin-bottom: 20px;
-    margin-left: 80px;
-    max-width: 150px;
-    /* display: flex; */
-    /* justify-content: center; */
-}
-
 .container input{
     width: 300px;
     height: 40px;
@@ -79,6 +70,10 @@ body{
     margin-bottom: 20px;
     margin-left: 80px;
     max-width: 150px !important;
+}
+
+.create-btn{
+    margin-left: 110px;
 }
 
 .card {
@@ -109,7 +104,7 @@ body{
 
 .card-body img{
     border-radius: 20px;
-    width: 400px;
+    width: 300px;
     height: 250px;
     border: 1px solid rgba(164, 170, 254, 0.6) !important;
     box-shadow: #bfbfff;
@@ -152,13 +147,19 @@ hr {
 }
 
 .edit-img{
-    margin-left: -140px;
+    margin-left: -120px;
     padding: 5px;
 }
 
+.edit-btn{
+    /* display: flex;
+    justify-content: center; */
+    margin-left: 120px !important;
+}
+
 #searchResults {
-  font-size: 0.85rem;
-  max-height: 180px;
+  font-size: 1.25rem;
+  max-height: 250px;
   padding: 4px;
 }
 

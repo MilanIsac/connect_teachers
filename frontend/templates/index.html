@@ -13,9 +13,9 @@
 
 <div class="all_cards">
     {% for teacher in teachers %}
-    <div class="card h-100 shadow text-white" style="background-color: #1e1e1e; width: 18rem;">
+    <div class="card h-100 shadow text-white" style="background-color: #1e1e1e; width: 15rem;">
         <img src="{{ teacher.image or url_for('static', filename='images/logo.jpg') }}" class="card-img-top"
-            alt="Profile image" style="height: 180px; object-fit: cover;">
+            alt="Profile image" style="height: 230px; object-fit: cover;">
         <div class="card-body">
             <h5 class="card-title">{{ teacher.username }}</h5>
             <p class="card-text">{{ teacher.description }}</p>

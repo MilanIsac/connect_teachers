@@ -282,7 +282,23 @@ def search_teachers():
     results = cursor.fetchall()
     return jsonify(results)
 
+@app.route('/your_profile')
+def your_profile():
+    if 'username' not in session:
+        return redirect(url_for('login'))
 
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute("""
+        SELECT u.username, u.email, p.image, p.description, p.phone
+        FROM users u
+        LEFT JOIN profiles p ON u.id = p.user_id
+        WHERE u.username = %s
+    """, (session['username'],))
+    user = cursor.fetchone()
+
+    return render_template('show_profile.html', user=user)
+
+    
 
 if __name__ == '__main__':
     app.run(debug=True)
