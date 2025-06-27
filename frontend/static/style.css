@@ -65,7 +65,7 @@ body{
     /* border-radius: 13px; */
 }
 
-.login-btn{
+.login-btn, .signup-submit{
     margin-top: 10px;
     margin-bottom: 20px;
     margin-left: 80px;

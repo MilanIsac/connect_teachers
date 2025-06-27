@@ -32,7 +32,7 @@
                 {% if 'username' in session and not session.get('has_profile') %}
                 <li class="nav-item"><a class="nav-link" href="/create_profile">Create Your Profile</a></li>
                 {% elif 'username' in session and session.get('has_profile') %}
-                <li class="nav-item fw-normal"><a class="nav-link" href="/your_profile">Your Profile</a></li>
+                <li class="nav-item fw-normal"><a class="nav-link" href="/show_profile">Your Profile</a></li>
                 {% endif %}
             </ul>
 
