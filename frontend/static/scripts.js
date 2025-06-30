@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 i++;
                 setTimeout(type, 100);
             } else if (cursor) {
-                cursor.style.display = 'none'; // hide cursor after typing
+                cursor.style.display = 'none';
             }
         }
         type();

@@ -44,27 +44,27 @@ def create_profile():
     return render_template('create_profile.html')
 
 
-# @profile_bp.route('/show_profile')
-# def show_profile():
-#     if 'username' not in session:
-#         return redirect(url_for('auth.login'))
+@profile_bp.route('/show_profile')
+def show_profile():
+    if 'username' not in session:
+        return redirect(url_for('auth.login'))
 
-#     try:
-#         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-#         cursor.execute("""
-#             SELECT u.username, u.email, p.image, p.description, p.phone
-#             FROM users u
-#             LEFT JOIN profiles p ON u.id = p.user_id
-#             WHERE u.username = %s
-#         """, (session['username'],))
-#         user = cursor.fetchone()
-#         if not user:
-#             flash("Profile not found", "warning")
-#             return redirect(url_for('main.index'))
-#         return render_template('show_profile.html', user=user)
-#     except Exception as e:
-#         flash("Error fetching profile: " + str(e), "warning")
-#         return redirect(url_for('main.index'))
+    try:
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute("""
+            SELECT u.username, u.email, p.image, p.description, p.phone
+            FROM users u
+            LEFT JOIN profiles p ON u.id = p.user_id
+            WHERE u.username = %s
+        """, (session['username'],))
+        user = cursor.fetchone()
+        if not user:
+            flash("Profile not found", "warning")
+            return redirect(url_for('main.index'))
+        return render_template('show_profile.html', user=user)
+    except Exception as e:
+        flash("Error fetching profile: " + str(e), "warning")
+        return redirect(url_for('main.index'))
 
 
 @profile_bp.route('/edit_profile', methods=['GET', 'POST'])
