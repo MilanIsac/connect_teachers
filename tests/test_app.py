@@ -9,7 +9,7 @@ load_dotenv()
 
 import sys
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from app import app as flask_app
+from app import app as create_app
 
 # ----- Cloudinary mock -----
 def dummy_upload(file):
@@ -19,12 +19,12 @@ cloudinary.uploader.upload = dummy_upload
 # ----- Test Client Fixture -----
 @pytest.fixture
 def client():
-    flask_app.config['TESTING'] = True
-    flask_app.config['WTF_CSRF_ENABLED'] = False
-    flask_app.secret_key = 'test-secret-key'  # ✅ ensure session works
+    create_app.config['TESTING'] = True
+    create_app.config['WTF_CSRF_ENABLED'] = False
+    create_app.secret_key = 'test-secret-key'  # ✅ ensure session works
 
-    with flask_app.test_client() as client:
-        with flask_app.app_context():
+    with create_app.test_client() as client:
+        with create_app.app_context():
             yield client
 
 
