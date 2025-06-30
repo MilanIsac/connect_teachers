@@ -4,8 +4,8 @@ import pytest
 import cloudinary.uploader
 from unittest.mock import patch, MagicMock
 from dotenv import load_dotenv
-load_dotenv()
 
+load_dotenv()
 
 import sys
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
@@ -19,7 +19,7 @@ cloudinary.uploader.upload = dummy_upload
 # ----- Test Client Fixture -----
 @pytest.fixture
 def client():
-    app = create_app()  # ✅ Call the function to get the app instance
+    app = create_app()
     app.config['TESTING'] = True
     app.config['WTF_CSRF_ENABLED'] = False
     app.secret_key = 'test-secret-key'
@@ -37,7 +37,7 @@ def test_signup_and_login(mock_mysql, client):
     mock_mysql.connection.cursor.return_value = cursor
     cursor.fetchone.side_effect = lambda: {'id': 1, 'username': 'testuser', 'password': 'hashed'}
 
-
+    # Simulate signup
     client.post('/signup', data={
         'username': 'testuser',
         'email': 'test@example.com',
@@ -45,6 +45,7 @@ def test_signup_and_login(mock_mysql, client):
         'confirm_password': 'testpass'
     }, follow_redirects=True)
 
+    # Simulate login
     cursor.fetchone.return_value = {'id': 1, 'username': 'testuser', 'password': 'hashed'}
 
     response = client.post('/login', data={
@@ -52,7 +53,8 @@ def test_signup_and_login(mock_mysql, client):
         'password': 'testpass'
     }, follow_redirects=True)
 
-    assert b'Logout' in response.data or b'Profile' in response.data
+    assert b'Logout' in response.data or b'Your Profile' in response.data
+
 
 @patch('app.mysql')
 def test_profile_creation(mock_mysql, client):
@@ -72,7 +74,8 @@ def test_profile_creation(mock_mysql, client):
         'image': dummy_image
     }, content_type='multipart/form-data', follow_redirects=True)
 
-    assert b'Profile created successfully' in response.data
+    assert b'Profile created successfully!' in response.data
+
 
 @patch('app.mysql')
 def test_profile_editing(mock_mysql, client):
@@ -91,10 +94,12 @@ def test_profile_editing(mock_mysql, client):
 
     assert b'Profile updated successfully' in response.data
 
+
 @patch('app.mysql')
 def test_create_profile_requires_login(mock_mysql, client):
     response = client.get('/create_profile', follow_redirects=True)
-    assert b'Login' in response.data or b'Sign Up' in response.data
+    assert b'Login' in response.data or b'Signup' in response.data
+
 
 @patch('app.mysql')
 def test_invalid_email_signup(mock_mysql, client):
@@ -105,6 +110,7 @@ def test_invalid_email_signup(mock_mysql, client):
         'confirm_password': 'pass123'
     }, follow_redirects=True)
     assert b'Invalid email address' in response.data
+
 
 @patch('app.mysql')
 def test_password_mismatch(mock_mysql, client):
