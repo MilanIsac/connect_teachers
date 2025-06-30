@@ -19,12 +19,13 @@ cloudinary.uploader.upload = dummy_upload
 # ----- Test Client Fixture -----
 @pytest.fixture
 def client():
-    create_app.config['TESTING'] = True
-    create_app.config['WTF_CSRF_ENABLED'] = False
-    create_app.secret_key = 'test-secret-key'  # ✅ ensure session works
+    app = create_app()  # ✅ Call the function to get the app instance
+    app.config['TESTING'] = True
+    app.config['WTF_CSRF_ENABLED'] = False
+    app.secret_key = 'test-secret-key'
 
-    with create_app.test_client() as client:
-        with create_app.app_context():
+    with app.test_client() as client:
+        with app.app_context():
             yield client
 
 
